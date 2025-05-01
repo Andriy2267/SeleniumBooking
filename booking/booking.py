@@ -2,9 +2,9 @@ from selenium import webdriver
 import booking.constrants as const
 import os
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from booking.bookingfiltration import BookingFiltration
 import time
+from booking.bookingReport import BookingReport
 
 class Booking(webdriver.Chrome):
     def __init__(self, driver_path=r"C:\Users\ASUS\Desktop\ChromeDriver\chrome-win64", teardown=False):
@@ -31,20 +31,28 @@ class Booking(webdriver.Chrome):
         self.get(const.BASE_URL)
 
     def change_currency(self, currency_code="USD"):
-        # Клік на кнопку вибору валюти
         currency_button = self.find_element(By.CSS_SELECTOR, 'button[data-testid="header-currency-picker-trigger"]')
         currency_button.click()
-        time.sleep(2)  # Зачекай, поки відкриється меню
+        time.sleep(2)
 
-        # Знайти всі елементи валют
         currency_options = self.find_elements(By.CSS_SELECTOR, 'button[data-testid="selection-item"]')
-        print(currency_options)
         for option in currency_options:
             if currency_code in option.text:
                 option.click()
                 break
-        time.sleep(2)  # Зачекай, поки зміна валюти набуде чинності
+        time.sleep(2)
 
+    def change_language(self, language="English (UK)"):
+        select_language_element = self.find_element(By.CSS_SELECTOR,
+                                                    'button[data-testid="header-language-picker-trigger"]')
+        select_language_element.click()
+        time.sleep(2)
+
+        language_options = self.find_elements(By.CSS_SELECTOR, 'button[data-testid="selection-item"]')
+        for language_option in language_options:
+            if language in language_option.text:
+                language_option.click()
+                break
 
     def select_place_to_go(self, place_to_go):
         search_field = self.find_element(By.ID, ':rh:')
@@ -65,28 +73,36 @@ class Booking(webdriver.Chrome):
         self.find_element(By.CSS_SELECTOR, 'button[data-testid="occupancy-config"]').click()
         time.sleep(1)
 
-        # Зменшити до мінімуму (1 дорослий)
         while True:
             try:
-                value_element = self.find_element(By.XPATH, '//label[contains(text(),"Дорослі")]/following::input[1]')
+                value_element = self.find_element(By.XPATH, '//label[contains(text(),"Adults")]/following::input[1]')
                 value = int(value_element.get_attribute("value"))
 
                 if value <= 1:
                     break
 
-                minus_button = self.find_element(By.XPATH, '//label[contains(text(),"Дорослі")]/following::button[1]')
+                minus_button = self.find_element(By.XPATH, '//label[contains(text(),"Adults")]/following::button[1]')
                 minus_button.click()
                 time.sleep(0.2)
             except Exception as e:
                 print("Помилка зменшення:", e)
                 break
 
-        # Збільшити до бажаної кількості
         for _ in range(adult_count - 1):
-            plus_button = self.find_element(By.XPATH, '//label[contains(text(),"Дорослі")]/following::button[2]')
+            plus_button = self.find_element(By.XPATH, '//label[contains(text(),"Adults")]/following::button[2]')
             plus_button.click()
             time.sleep(0.2)
 
     def click_search(self):
         search_element = self.find_element(By.CSS_SELECTOR, 'button[type="submit"]')
         search_element.click()
+
+    def apply_filtration(self):
+        filtration = BookingFiltration(driver=self)
+        filtration.close_genius_popup()
+        filtration.apply_star_rating(4)
+
+    def report_results(self):
+        hotel_boxes = self.find_element(By.CSS_SELECTOR, 'div[data-results-container="1"]')
+        report = BookingReport(hotel_boxes)
+        print(report.pull_deal_box_attributes())

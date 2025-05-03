@@ -7,8 +7,8 @@
     <list default="true" id="05440829-f14d-4171-a9eb-14917b421ae9" name="Changes" comment="&quot;Selenium progress&quot;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/booking/booking.py" beforeDir="false" afterPath="$PROJECT_DIR$/booking/booking.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking/bookingfiltration.py" beforeDir="false" afterPath="$PROJECT_DIR$/booking/bookingfiltration.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking/bookingReport.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking/bookingfiltration.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

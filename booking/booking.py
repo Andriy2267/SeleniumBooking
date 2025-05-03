@@ -4,8 +4,8 @@ from selenium.webdriver.chrome.service import Service
 import booking.constrants as const
 import os
 from selenium.webdriver.common.by import By
-from booking.bookingfiltration import BookingFiltration
-from booking.bookingReport import BookingReport
+from booking.components.booking_filtration import BookingFiltration
+from booking.components.booking_report import BookingReport
 from selenium.webdriver.support import expected_conditions as ES
 from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
